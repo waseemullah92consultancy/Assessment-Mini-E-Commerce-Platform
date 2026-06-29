@@ -14,6 +14,7 @@ import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRound
 export interface Product {
   _id: string;
   name: string;
+  description?: string;
   price: number;
   images: string[];
   category: string;
@@ -200,6 +201,25 @@ export const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
           >
             {product.name}
           </Typography>
+
+          {/* Description — truncated to 2 lines */}
+          {product.description && (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                lineHeight: 1.4,
+                overflow: 'hidden',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                mb: 1,
+                fontSize: '0.8rem',
+              }}
+            >
+              {product.description}
+            </Typography>
+          )}
 
           {/* Price */}
           <Typography

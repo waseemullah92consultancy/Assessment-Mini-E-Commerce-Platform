@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const CUSTOMER_PROTECTED = ['/cart', '/checkout', '/orders'];
+const CUSTOMER_PROTECTED = ['/cart', '/checkout', '/orders', '/profile'];
 const ADMIN_PREFIX = '/admin';
 
 export function middleware(request: NextRequest) {
@@ -32,6 +32,7 @@ export const config = {
     '/cart/:path*',
     '/checkout/:path*',
     '/orders/:path*',
+    '/profile/:path*',
     '/admin/:path*',
   ],
 };
