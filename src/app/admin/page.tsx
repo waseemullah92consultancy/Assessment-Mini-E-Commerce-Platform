@@ -257,8 +257,8 @@ export default function AdminDashboard() {
                   }
                 />
                 <ReTooltip
-                  formatter={(value: number) => [
-                    `PKR ${value.toLocaleString()}`,
+                  formatter={(value) => [
+                    `PKR ${Number(value).toLocaleString()}`,
                     'Revenue',
                   ]}
                   contentStyle={{

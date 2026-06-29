@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Box from '@mui/material/Box';
@@ -149,7 +149,9 @@ function ProductDialog({
     reset,
     formState: { errors },
   } = useForm<ProductFormValues>({
-    resolver: yupResolver(productSchema),
+    // yup's InferType marks imageUrl/isActive optional while the resolver's
+    // output types them required — cast bridges that known RHF↔yup friction.
+    resolver: yupResolver(productSchema) as Resolver<ProductFormValues>,
     defaultValues: {
       name: '',
       description: '',
