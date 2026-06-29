@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
+import { UserDocument } from '../users/schemas/user.schema';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 
@@ -35,6 +36,10 @@ export class AuthService {
   async refreshTokens(userId: string) {
     const user = await this.usersService.findById(userId);
     return this.generateTokens(user);
+  }
+
+  async getMe(userId: string): Promise<UserDocument> {
+    return this.usersService.findById(userId);
   }
 
   private generateTokens(user: any) {
