@@ -96,4 +96,28 @@ export class ProductsService {
       $inc: { stockQuantity: -quantity },
     });
   }
+
+  async addImageUrl(id: string, imageUrl: string): Promise<ProductDocument> {
+    const product = await this.productModel.findByIdAndUpdate(
+      id,
+      { $push: { images: imageUrl } },
+      { new: true },
+    );
+    if (!product) throw new NotFoundException('Product not found');
+    return product;
+  }
+
+  async addImageFile(
+    id: string,
+    filename: string,
+  ): Promise<{ product: ProductDocument; imageUrl: string }> {
+    const imageUrl = `/uploads/${filename}`;
+    const product = await this.productModel.findByIdAndUpdate(
+      id,
+      { $push: { images: imageUrl } },
+      { new: true },
+    );
+    if (!product) throw new NotFoundException('Product not found');
+    return { product, imageUrl };
+  }
 }

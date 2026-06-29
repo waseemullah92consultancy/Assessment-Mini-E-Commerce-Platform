@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { MulterError } from 'multer';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -27,6 +28,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
         typeof exceptionResponse === 'string'
           ? exceptionResponse
           : (exceptionResponse as any).message || exception.message;
+    } else if (exception instanceof MulterError) {
+      statusCode = HttpStatus.BAD_REQUEST;
+      message =
+        exception.code === 'LIMIT_FILE_SIZE'
+          ? 'File too large. Maximum size is 5MB'
+          : exception.message;
     } else {
       this.logger.error(
         'Unhandled exception',
