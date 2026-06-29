@@ -18,6 +18,27 @@ This project was built using **Claude Code** (Anthropic's CLI for Claude) across
 
 **CLAUDE.md** was used to give the agent persistent context across sessions — project structure, tech stack choices, and key conventions. This eliminated the need to re-explain the architecture at the start of each prompt.
 
+### Orchestration model — specialised subagents
+
+Rather than driving one monolithic agent, the build was **orchestrated** through a set of specialised subagents, each scoped to a single lane. They live in [`.claude/agents/`](.claude/agents/) and are loaded by Claude Code as delegatable agents; reusable launch prompts live in [`.claude/commands/`](.claude/commands/).
+
+| Agent | Lane |
+|---|---|
+| `backend-api` | NestJS modules, services, DTOs, schemas, guards |
+| `frontend-ui` | Next.js pages/components within the NOIR design system |
+| `api-integration` | Axios client, typed API layer, Zustand stores, the frontend↔backend contract |
+| `bug-fixer` | Cross-stack root-cause defect diagnosis |
+| `code-optimizer` | Behaviour-preserving refactors + query/perf tuning |
+| `qa-testing` | Jest unit/integration tests + edge-case verification |
+
+**Why this shape:** each agent's system prompt encodes (a) its responsibilities and (b) the specific regressions it must not reintroduce — e.g. `api-integration` is told that `GET /orders` returns `{ orders, ... }` not an array, and that cart routes key on `productId`. Encoding the hard-won lessons *into the agent* kept quality consistent and stopped later sessions re-discovering the same traps.
+
+**A feature flowed as a vertical slice:** `backend-api` → `api-integration` → `frontend-ui` → `qa-testing`, with `bug-fixer` pulled in on a red suite and `code-optimizer` only after green. This ordering is captured as a reusable command in [`.claude/commands/new-feature.md`](.claude/commands/new-feature.md); a separate adversarial [`review-slice`](.claude/commands/review-slice.md) command was used to verify a slice before calling it done.
+
+**Context management:** the orchestrator fed each agent only the files in its lane (not the whole repo), and `CLAUDE.md` carried the cross-cutting conventions every agent inherits. This kept each agent's context small and focused, which measurably reduced drift.
+
+A fuller description of the roster and the orchestration flow is in [`.claude/agents/README.md`](.claude/agents/README.md).
+
 ---
 
 ## 2. Where the Agent Helped vs. Where It Needed Correction
