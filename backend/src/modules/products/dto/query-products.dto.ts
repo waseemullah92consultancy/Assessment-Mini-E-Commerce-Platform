@@ -2,6 +2,12 @@ import { IsOptional, IsString, IsNumber, IsEnum, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ProductCategory } from '../schemas/product.schema';
 
+export enum SortBy {
+  PRICE_ASC = 'price_asc',
+  PRICE_DESC = 'price_desc',
+  NEWEST = 'newest',
+}
+
 export class QueryProductsDto {
   @IsOptional()
   @IsString()
@@ -22,6 +28,10 @@ export class QueryProductsDto {
   @IsNumber()
   @Min(0)
   maxPrice?: number;
+
+  @IsOptional()
+  @IsEnum(SortBy)
+  sortBy?: SortBy = SortBy.NEWEST;
 
   @IsOptional()
   @Type(() => Number)

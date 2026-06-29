@@ -5,6 +5,9 @@ import {
   IsEnum,
   IsBoolean,
   IsOptional,
+  IsPositive,
+  IsInt,
+  IsNotEmpty,
   Min,
 } from 'class-validator';
 import { ProductCategory } from '../schemas/product.schema';
@@ -12,6 +15,7 @@ import { ProductCategory } from '../schemas/product.schema';
 export class UpdateProductDto {
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   name?: string;
 
   @IsOptional()
@@ -20,7 +24,7 @@ export class UpdateProductDto {
 
   @IsOptional()
   @IsNumber()
-  @Min(0)
+  @IsPositive()
   price?: number;
 
   @IsOptional()
@@ -33,7 +37,7 @@ export class UpdateProductDto {
   category?: ProductCategory;
 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   @Min(0)
   stockQuantity?: number;
 

@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  Put,
+  Patch,
   Delete,
   Body,
   Param,
@@ -25,7 +25,7 @@ export class CartController {
     return this.cartService.addItem(user._id.toString(), addToCartDto);
   }
 
-  @Put('items/:productId')
+  @Patch('items/:productId')
   updateItem(
     @CurrentUser() user: any,
     @Param('productId') productId: string,

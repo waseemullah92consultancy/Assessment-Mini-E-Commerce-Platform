@@ -4,7 +4,13 @@ import { Model } from 'mongoose';
 import { Product, ProductDocument } from './schemas/product.schema';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { QueryProductsDto } from './dto/query-products.dto';
+import { QueryProductsDto, SortBy } from './dto/query-products.dto';
+
+const SORT_MAP = {
+  [SortBy.PRICE_ASC]: { price: 1 as const },
+  [SortBy.PRICE_DESC]: { price: -1 as const },
+  [SortBy.NEWEST]: { createdAt: -1 as const },
+} as const;
 
 @Injectable()
 export class ProductsService {
@@ -18,7 +24,16 @@ export class ProductsService {
   }
 
   async findAll(query: QueryProductsDto) {
-    const { search, category, minPrice, maxPrice, page = 1, limit = 12 } = query;
+    const {
+      search,
+      category,
+      minPrice,
+      maxPrice,
+      sortBy = SortBy.NEWEST,
+      page = 1,
+      limit = 12,
+    } = query;
+
     const filter: Record<string, any> = { isActive: true };
 
     if (search) {
@@ -35,8 +50,10 @@ export class ProductsService {
     }
 
     const skip = (page - 1) * limit;
+    const sort = SORT_MAP[sortBy] ?? { createdAt: -1 };
+
     const [products, total] = await Promise.all([
-      this.productModel.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 }),
+      this.productModel.find(filter).skip(skip).limit(limit).sort(sort),
       this.productModel.countDocuments(filter),
     ]);
 
@@ -64,9 +81,14 @@ export class ProductsService {
     return product;
   }
 
-  async remove(id: string): Promise<void> {
-    const result = await this.productModel.findByIdAndDelete(id);
-    if (!result) throw new NotFoundException('Product not found');
+  async remove(id: string): Promise<ProductDocument> {
+    const product = await this.productModel.findByIdAndUpdate(
+      id,
+      { isActive: false },
+      { new: true },
+    );
+    if (!product) throw new NotFoundException('Product not found');
+    return product;
   }
 
   async decrementStock(productId: string, quantity: number): Promise<void> {
