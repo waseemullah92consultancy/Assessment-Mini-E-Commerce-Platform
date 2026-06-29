@@ -9,7 +9,6 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap',
 });
-
 const syne = Syne({
   subsets: ['latin'],
   variable: '--font-syne',
