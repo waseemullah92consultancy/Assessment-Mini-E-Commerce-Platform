@@ -159,3 +159,77 @@ export const getOrders = (params?: { page?: number; limit?: number }) =>
 
 export const getOrder = (id: string) =>
   api.get<ApiResponse<Order>>(`/orders/${id}`);
+
+// ── Admin types ───────────────────────────────────────────────────────────────
+
+export interface Analytics {
+  totalRevenue: number;
+  totalOrders: number;
+  ordersByStatus: Record<string, number>;
+  topProducts: Array<{
+    productId: string;
+    name: string;
+    totalSold: number;
+    revenue: number;
+  }>;
+  revenueByDay: Array<{ date: string; revenue: number }>;
+}
+
+export interface AdminOrdersResult {
+  orders: AdminOrder[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
+export interface AdminOrder extends Omit<Order, 'userId'> {
+  userId: { _id: string; name: string; email: string } | string;
+}
+
+// ── Admin APIs ────────────────────────────────────────────────────────────────
+
+export const getAdminAnalytics = () =>
+  api.get<ApiResponse<Analytics>>('/admin/analytics');
+
+export const adminGetProducts = (params?: {
+  search?: string;
+  category?: string;
+  isActive?: boolean;
+  page?: number;
+  limit?: number;
+}) => api.get<ApiResponse<ProductsResult>>('/admin/products', { params });
+
+export const adminCreateProduct = (data: {
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stockQuantity: number;
+  images?: string[];
+  isActive?: boolean;
+}) => api.post<ApiResponse<Product>>('/products', data);
+
+export const adminUpdateProduct = (
+  id: string,
+  data: Partial<{
+    name: string;
+    description: string;
+    price: number;
+    category: string;
+    stockQuantity: number;
+    images: string[];
+    isActive: boolean;
+  }>,
+) => api.patch<ApiResponse<Product>>(`/products/${id}`, data);
+
+export const adminDeleteProduct = (id: string) =>
+  api.delete<ApiResponse<Product>>(`/products/${id}`);
+
+export const adminGetOrders = (params?: {
+  status?: string;
+  page?: number;
+  limit?: number;
+}) => api.get<ApiResponse<AdminOrdersResult>>('/admin/orders', { params });
+
+export const adminUpdateOrderStatus = (id: string, status: string) =>
+  api.patch<ApiResponse<Order>>(`/admin/orders/${id}/status`, { status });

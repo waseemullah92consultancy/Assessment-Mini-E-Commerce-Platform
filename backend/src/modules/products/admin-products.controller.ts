@@ -1,7 +1,9 @@
 import {
   Controller,
+  Get,
   Post,
   Param,
+  Query,
   Body,
   BadRequestException,
   UseInterceptors,
@@ -48,6 +50,16 @@ const multerOptions = {
 @Roles('admin')
 export class AdminProductsController {
   constructor(private readonly productsService: ProductsService) {}
+
+  @Get()
+  findAll(@Query() query: any) {
+    return this.productsService.findAllAdmin(query);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.productsService.findOne(id);
+  }
 
   /** Primary: add an image by URL */
   @Post(':id/image')

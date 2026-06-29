@@ -91,6 +91,31 @@ export class ProductsService {
     return product;
   }
 
+  async findAllAdmin(query: {
+    search?: string;
+    category?: string;
+    isActive?: boolean;
+    page?: number;
+    limit?: number;
+  }) {
+    const { search, category, isActive, page = 1, limit = 50 } = query;
+    const filter: Record<string, any> = {};
+    if (isActive !== undefined) filter.isActive = isActive;
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+      ];
+    }
+    if (category) filter.category = category;
+    const skip = (page - 1) * limit;
+    const [products, total] = await Promise.all([
+      this.productModel.find(filter).skip(skip).limit(limit).sort({ createdAt: -1 }),
+      this.productModel.countDocuments(filter),
+    ]);
+    return { products, total, page, totalPages: Math.ceil(total / limit) };
+  }
+
   async decrementStock(productId: string, quantity: number): Promise<void> {
     await this.productModel.findByIdAndUpdate(productId, {
       $inc: { stockQuantity: -quantity },

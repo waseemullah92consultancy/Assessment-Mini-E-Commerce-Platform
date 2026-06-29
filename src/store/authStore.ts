@@ -25,17 +25,21 @@ export const useAuthStore = create<AuthState>()(
 
       login: (accessToken, user) => {
         set({ user, accessToken, isAuthenticated: true });
-        // Lightweight session cookie so middleware can gate protected routes
         if (typeof document !== 'undefined') {
-          document.cookie = `auth-session=1; path=/; SameSite=Lax; max-age=${7 * 24 * 3600}`;
+          const maxAge = 7 * 24 * 3600;
+          document.cookie = `auth-session=1; path=/; SameSite=Lax; max-age=${maxAge}`;
+          if (user.role === 'admin') {
+            document.cookie = `admin-session=1; path=/; SameSite=Lax; max-age=${maxAge}`;
+          }
         }
       },
 
       logout: () => {
         set({ user: null, accessToken: null, isAuthenticated: false });
         if (typeof document !== 'undefined') {
-          document.cookie =
-            'auth-session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+          const expired = 'path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+          document.cookie = `auth-session=; ${expired}`;
+          document.cookie = `admin-session=; ${expired}`;
         }
       },
     }),

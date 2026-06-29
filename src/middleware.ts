@@ -1,21 +1,37 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-const PROTECTED = ['/cart', '/checkout', '/orders'];
+const CUSTOMER_PROTECTED = ['/cart', '/checkout', '/orders'];
+const ADMIN_PREFIX = '/admin';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isProtected = PROTECTED.some((p) => pathname.startsWith(p));
 
-  if (isProtected && !request.cookies.has('auth-session')) {
-    const url = new URL('/auth/login', request.url);
-    url.searchParams.set('redirect', pathname);
-    return NextResponse.redirect(url);
+  // Admin routes — must have admin-session cookie
+  if (pathname.startsWith(ADMIN_PREFIX)) {
+    if (!request.cookies.has('admin-session')) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+    return NextResponse.next();
+  }
+
+  // Customer-only routes — must have auth-session cookie
+  const isCustomerProtected = CUSTOMER_PROTECTED.some((p) =>
+    pathname.startsWith(p),
+  );
+  if (isCustomerProtected && !request.cookies.has('auth-session')) {
+    const loginUrl = new URL('/auth/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/cart/:path*', '/checkout/:path*', '/orders/:path*'],
+  matcher: [
+    '/cart/:path*',
+    '/checkout/:path*',
+    '/orders/:path*',
+    '/admin/:path*',
+  ],
 };

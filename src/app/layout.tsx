@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Syne } from 'next/font/google';
 import { ThemeProvider } from '../providers/ThemeProvider';
-import { NavbarConnected } from '../components/layout/NavbarConnected';
-import { Footer } from '../components/layout/Footer';
+import { StorefrontShell } from '../components/layout/StorefrontShell';
 import './globals.css';
 
 const inter = Inter({
@@ -34,9 +33,9 @@ export default function RootLayout({
     >
       <body style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <ThemeProvider>
-          <NavbarConnected />
-          {children}
-          <Footer />
+          <StorefrontShell>
+            {children}
+          </StorefrontShell>
         </ThemeProvider>
       </body>
     </html>
