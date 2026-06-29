@@ -228,6 +228,109 @@ const SEED_PRODUCTS = [
     stockQuantity: 28,
     isActive: true,
   },
+
+  // ── Additional catalog (more Electronics) ──────────────────────────────
+  {
+    name: 'Logitech MX Master 3S Wireless Performance Mouse',
+    description:
+      'Ultra-fast MagSpeed scrolling and an 8K DPI sensor that tracks on any surface, even glass. Quiet Clicks, ergonomic silhouette, and USB-C quick charging deliver 70 days of battery on a full charge.',
+    price: 99.99,
+    images: [
+      'https://picsum.photos/seed/mx-master/600/400',
+      'https://picsum.photos/seed/mx-master-2/600/400',
+    ],
+    category: ProductCategory.ELECTRONICS,
+    stockQuantity: 70,
+    isActive: true,
+  },
+  {
+    name: 'Anker 737 PowerCore 24,000mAh 140W Power Bank',
+    description:
+      'Charge a laptop, phone, and earbuds at once with 140W max output and three ports. A smart digital display shows real-time power stats. Recharges to 100% in about 52 minutes via USB-C.',
+    price: 149.99,
+    images: ['https://picsum.photos/seed/anker-powerbank/600/400'],
+    category: ProductCategory.ELECTRONICS,
+    stockQuantity: 5,
+    isActive: true,
+  },
+  {
+    name: 'Kindle Paperwhite 11th Gen 6.8" 16GB',
+    description:
+      'A 6.8" glare-free display with adjustable warm light, weeks of battery life, and IPX8 waterproofing. Holds thousands of titles so your entire library travels in one slim, lightweight device.',
+    price: 139.99,
+    images: ['https://picsum.photos/seed/kindle-paperwhite/600/400'],
+    category: ProductCategory.ELECTRONICS,
+    stockQuantity: 0,
+    isActive: true,
+  },
+
+  // ── More Clothing ──────────────────────────────────────────────────────
+  {
+    name: 'Adidas Ultraboost Light Running Shoes',
+    description:
+      'The lightest Ultraboost ever, built with a responsive Light BOOST midsole for energy return on every stride. A Primeknit+ upper hugs the foot while a Continental rubber outsole grips wet and dry roads.',
+    price: 189.99,
+    images: ['https://picsum.photos/seed/adidas-ultraboost/600/400'],
+    category: ProductCategory.CLOTHING,
+    stockQuantity: 60,
+    isActive: true,
+  },
+  {
+    name: 'Uniqlo Ultra Light Down Compact Vest',
+    description:
+      'Premium down fill delivers serious warmth at a barely-there weight, then packs into its own carry pouch. A versatile mid-layer for cool mornings, commutes, and travel.',
+    price: 49.9,
+    images: ['https://picsum.photos/seed/uniqlo-vest/600/400'],
+    category: ProductCategory.CLOTHING,
+    stockQuantity: 120,
+    isActive: true,
+  },
+
+  // ── More Books ─────────────────────────────────────────────────────────
+  {
+    name: 'Refactoring: Improving the Design of Existing Code, 2nd Edition',
+    description:
+      'Martin Fowler\'s definitive catalog of refactorings, fully updated with JavaScript examples. Learn to restructure code safely, in small steps, improving its design without changing its behavior.',
+    price: 47.99,
+    images: ['https://picsum.photos/seed/refactoring-book/600/400'],
+    category: ProductCategory.BOOKS,
+    stockQuantity: 90,
+    isActive: true,
+  },
+  {
+    name: 'Atomic Habits: An Easy & Proven Way to Build Good Habits',
+    description:
+      'James Clear reveals practical strategies to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results. A #1 New York Times bestseller.',
+    price: 27.0,
+    images: ['https://picsum.photos/seed/atomic-habits/600/400'],
+    category: ProductCategory.BOOKS,
+    stockQuantity: 210,
+    isActive: true,
+  },
+
+  // ── More Home ──────────────────────────────────────────────────────────
+  {
+    name: 'Philips Hue White & Color Ambiance Starter Kit (3 Bulbs)',
+    description:
+      'Set the mood with 16 million colors and warm-to-cool whites, all controllable by app or voice. Includes the Hue Bridge for whole-home smart lighting and routines that follow your day.',
+    price: 179.99,
+    images: ['https://picsum.photos/seed/philips-hue/600/400'],
+    category: ProductCategory.HOME,
+    stockQuantity: 4,
+    isActive: true,
+  },
+
+  // ── More Sports ────────────────────────────────────────────────────────
+  {
+    name: 'Manduka PRO Yoga Mat 6mm — Sustainable, Non-Slip',
+    description:
+      'A dense, cushioned 6mm mat engineered to last a lifetime, with a closed-cell surface that blocks moisture and bacteria. The high-performance grip keeps you grounded through every pose.',
+    price: 138.0,
+    images: ['https://picsum.photos/seed/manduka-mat/600/400'],
+    category: ProductCategory.SPORTS,
+    stockQuantity: 47,
+    isActive: true,
+  },
 ];
 
 async function seed() {
