@@ -3,22 +3,15 @@
 import { forwardRef, type ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import type { SxProps, Theme } from '@mui/material/styles';
-
-export interface EmptyStateAction {
-  label: string;
-  onClick: () => void;
-  variant?: 'contained' | 'outlined' | 'text';
-  href?: string;
-}
 
 export interface EmptyStateProps {
   /** An icon element — typically a MUI SvgIcon */
   icon?: ReactNode;
   title: string;
   description?: string;
-  action?: EmptyStateAction;
+  /** Any React node — usually a Button */
+  action?: ReactNode;
   sx?: SxProps<Theme>;
 }
 
@@ -72,14 +65,9 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         </Box>
 
         {action && (
-          <Button
-            variant={action.variant ?? 'contained'}
-            onClick={action.onClick}
-            {...(action.href ? { href: action.href, component: 'a' } : {})}
-            sx={{ mt: 0.5, borderRadius: 2 }}
-          >
-            {action.label}
-          </Button>
+          <Box sx={{ mt: 0.5 }}>
+            {action}
+          </Box>
         )}
       </Box>
     );
