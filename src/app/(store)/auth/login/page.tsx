@@ -52,7 +52,7 @@ function LoginForm() {
       const res = await loginUser(data.email, data.password);
       const { accessToken, user } = res.data.data;
       login(accessToken, user);
-      const redirect = searchParams.get('redirect') ?? '/';
+      const redirect = searchParams.get('redirect') ?? (user.role === 'admin' ? '/admin' : '/');
       router.push(redirect);
     } catch (err: any) {
       setApiError(

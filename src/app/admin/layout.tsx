@@ -177,15 +177,21 @@ export default function AdminLayout({
   const pathname = usePathname();
   const { user, isAuthenticated, logout } = useAuthStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Enforce admin-only access client-side (middleware is the primary guard)
   useEffect(() => {
+    if (!mounted) return;
     if (!isAuthenticated || user?.role !== 'admin') {
       router.replace('/');
     }
-  }, [isAuthenticated, user, router]);
+  }, [mounted, isAuthenticated, user, router]);
 
-  if (!isAuthenticated || user?.role !== 'admin') {
+  if (!mounted || !isAuthenticated || user?.role !== 'admin') {
     return null;
   }
 
